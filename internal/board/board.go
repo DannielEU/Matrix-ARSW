@@ -51,7 +51,6 @@ func (b *Board) IsEmpty(x, y int) bool {
 	return b.Grid[x][y] == '□'
 }
 
-// Encuentra el teléfono más cercano a (x,y)
 func (b *Board) NearestPhone(x, y int) (int, int) {
 	b.mu.Lock()
 	defer b.mu.Unlock()

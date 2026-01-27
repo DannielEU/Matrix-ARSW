@@ -23,6 +23,11 @@ func main() {
 		var x, y int
 		fmt.Printf("Posición muro %d (x y): ", i+1)
 		fmt.Scan(&x, &y)
+		for !validator(x, size) || !validator(y, size) {
+			fmt.Println("Posición inválida. Intente de nuevo.")
+			fmt.Printf("Posición muro %d (x y): ", i+1)
+			fmt.Scan(&x, &y)
+		}
 		b.Set(x, y, '#')
 	}
 
@@ -33,17 +38,21 @@ func main() {
 		var x, y int
 		fmt.Printf("Posición teléfono %d (x y): ", i+1)
 		fmt.Scan(&x, &y)
-		b.Set(x, y, 'T')
+		for !validator(x, size) || !validator(y, size) {
+			fmt.Println("Posición inválida. Intente de nuevo.")
+			fmt.Printf("Posición teléfono %d (x y): ", i+1)
+			fmt.Scan(&x, &y)
+		}
+		b.Set(x, y, 'T') 
 	}
 
-	// Configurar protagonista
+
 	var px, py int
 	fmt.Print("Posición del protagonista (x y): ")
 	fmt.Scan(&px, &py)
 	prota := &entity.Protagonist{X: px, Y: py}
 	b.Set(px, py, prota.Icon())
 
-	// Configurar agentes
 	var numAgents int
 	fmt.Print("Número de agentes: ")
 	fmt.Scan(&numAgents)
@@ -57,17 +66,18 @@ func main() {
 		agents[i] = a
 	}
 
-	// Función para dar posición del protagonista
 	target := func() (int, int) {
 		return prota.X, prota.Y
 	}
 
-	// Lanzar goroutines con doneCh
 	go prota.Run(b, moveCh, doneCh)
 	for _, a := range agents {
 		go a.Run(b, moveCh, doneCh, target)
 	}
 
-	// Ejecutar motor con fin de juego
 	engine.Run(b, moveCh, doneCh)
+}
+
+func validator(x int, limit int) bool {
+	return x >= 0 && x < limit
 }

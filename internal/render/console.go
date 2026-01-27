@@ -12,5 +12,7 @@ func Draw(b *board.Board) {
 			fmt.Printf("%c ", b.Get(i, j))
 		}
 		fmt.Println()
+		
 	}
+	fmt.Println("#-----------------------#")
 }
